@@ -13,20 +13,14 @@ class App extends Component {
       { label: '45-64', value: 8819342 },
       { label: '≥65', value: 612463 },
     ],
-    width: 960,
-    height: 500,
   };
 
   render() {
-    const { data, width, height } = this.state;
+    const { data } = this.state;
 
     return (
     <div className="App">
-        <PieChart
-          data={data}
-          width={width}
-          height={height}
-        />
+        <PieChart data={data} />
       </div>
     );
   }
