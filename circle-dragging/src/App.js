@@ -40,7 +40,6 @@ class App extends Component {
         drag()
           .on('start', function started() {
             onDragStarted(this);
-            console.log(this);
           })
           .on('drag', function dragged() {
             onDrag(this, event);
@@ -51,7 +50,7 @@ class App extends Component {
       );
   };
 
-  onDragStarted = (id) => {
+  onDragStarted = ({ id }) => {
     const { circles } = this.state;
     const parsedId = parseInt(id, 10);
 
