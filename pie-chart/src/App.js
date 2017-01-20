@@ -19,7 +19,7 @@ class App extends Component {
     const { data } = this.state;
 
     return (
-    <div className="App">
+      <div className="App">
         <PieChart data={data} />
       </div>
     );
