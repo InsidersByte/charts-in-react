@@ -78,7 +78,7 @@ class App extends Component {
       const { radius } = circle;
       const minimum = radius;
       const maximumX = width - radius;
-      const maximumY = width - radius;
+      const maximumY = height - radius;
 
       if (x < radius) {
         x = minimum;
