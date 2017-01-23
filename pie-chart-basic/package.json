@@ -1,5 +1,5 @@
 {
-  "name": "basic-pie-chart",
+  "name": "pie-chart-basic",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
