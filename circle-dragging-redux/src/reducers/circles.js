@@ -8,8 +8,8 @@ const radius = 32;
 const colours = scaleOrdinal(schemeCategory20);
 
 const initialState = range(20).map((id) => ({
-  id,
   radius,
+  id: `circle-${id}`,
   active: false,
   colour: colours(id),
   x: Math.round(Math.random() * (width - radius * 2) + radius),

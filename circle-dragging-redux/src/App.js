@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { selectAll, event } from 'd3-selection';
-import { drag } from 'd3-drag';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from './actions';
@@ -16,49 +14,21 @@ class App extends Component {
     circles: this.props.circles,
   };
 
-  componentDidMount() {
-    this.setDragBehaviour();
-  }
-
   componentWillReceiveProps({ circles }) {
     this.setState({ circles });
   }
 
-  componentDidUpdate() {
-    this.setDragBehaviour();
-  }
-
-  setDragBehaviour = () => {
-    const { onDragStarted, onDrag, onDragEnd } = this;
-
-    selectAll('circle')
-      .call(
-        drag()
-          .on('start', function started() {
-            onDragStarted(this);
-          })
-          .on('drag', function dragged() {
-            onDrag(this, event);
-          })
-          .on('end', function ended() {
-            onDragEnd(this);
-          })
-      );
-  };
-
-  onDragStarted = ({ id }) => {
+  onDragStart = ({ id }) => {
     const { setActive } = this.props;
-    const parsedId = parseInt(id, 10);
-    setActive(parsedId);
+    setActive(id);
   };
 
   onDrag = ({ id }, dragEvent) => {
     const { circles } = this.state;
     let { x, y } = dragEvent;
-    const parsedId = parseInt(id, 10);
 
     const updatedCircles = circles.map((circle) => {
-      if (circle.id !== parsedId) {
+      if (circle.id !== id) {
         return circle;
       }
 
@@ -92,10 +62,9 @@ class App extends Component {
   onDragEnd = ({ id }) => {
     const { unsetActive, updateCirclePosition } = this.props;
     const { circles } = this.state;
-    const parsedId = parseInt(id, 10);
-    const circle = circles.find(o => o.id === parsedId);
+    const circle = circles.find(o => o.id === id);
     updateCirclePosition(circle);
-    unsetActive(parsedId);
+    unsetActive(id);
   };
 
   render() {
@@ -107,6 +76,9 @@ class App extends Component {
           circles={circles}
           width={width}
           height={height}
+          onDragStart={this.onDragStart}
+          onDrag={this.onDrag}
+          onDragEnd={this.onDragEnd}
         />
 
         <DevTools />

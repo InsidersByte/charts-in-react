@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { selectAll, event } from 'd3-selection';
-import { drag } from 'd3-drag';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ActionCreators } from 'redux-undo';
@@ -18,40 +16,16 @@ class App extends Component {
     circles: this.props.circles,
   };
 
-  componentDidMount() {
-    this.setDragBehaviour();
-  }
-
   componentWillReceiveProps({ circles }) {
     this.setState({ circles });
   }
 
-  componentDidUpdate() {
-    this.setDragBehaviour();
-  }
-
-  setDragBehaviour = () => {
-    const { onDrag, onDragEnd } = this;
-
-    selectAll('circle')
-      .call(
-        drag()
-          .on('drag', function dragged() {
-            onDrag(this, event);
-          })
-          .on('end', function ended() {
-            onDragEnd(this);
-          })
-      );
-  };
-
   onDrag = ({ id }, dragEvent) => {
     const { circles } = this.state;
     let { x, y } = dragEvent;
-    const parsedId = parseInt(id, 10);
 
     const updatedCircles = circles.map((circle) => {
-      if (circle.id !== parsedId) {
+      if (circle.id !== id) {
         return circle;
       }
 
@@ -85,8 +59,7 @@ class App extends Component {
   onDragEnd = ({ id }) => {
     const { updateCirclePosition } = this.props;
     const { circles } = this.state;
-    const parsedId = parseInt(id, 10);
-    const circle = circles.find(o => o.id === parsedId);
+    const circle = circles.find(o => o.id === id);
     updateCirclePosition(circle);
   };
 
@@ -100,6 +73,8 @@ class App extends Component {
           circles={circles}
           width={width}
           height={height}
+          onDrag={this.onDrag}
+          onDragEnd={this.onDragEnd}
         />
 
         <div>

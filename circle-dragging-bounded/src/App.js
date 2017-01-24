@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { range } from 'd3-array';
 import { scaleOrdinal, schemeCategory20 } from 'd3-scale';
-import { selectAll, event } from 'd3-selection';
-import { drag } from 'd3-drag';
 import Circles from './Circles';
 import './App.css';
 
@@ -15,8 +13,8 @@ const colours = scaleOrdinal(schemeCategory20);
 class App extends Component {
   state = {
     circles: range(20).map((id) => ({
-      id,
       radius,
+      id: `circle-${id}`,
       active: false,
       colour: colours(id),
       x: Math.round(Math.random() * (width - radius * 2) + radius),
@@ -24,38 +22,11 @@ class App extends Component {
     })),
   };
 
-  componentDidMount() {
-    this.setDragBehaviour();
-  }
-
-  componentDidUpdate() {
-    this.setDragBehaviour();
-  }
-
-  setDragBehaviour = () => {
-    const { onDragStarted, onDrag, onDragEnd } = this;
-
-    selectAll('circle')
-      .call(
-        drag()
-          .on('start', function started() {
-            onDragStarted(this);
-          })
-          .on('drag', function dragged() {
-            onDrag(this, event);
-          })
-          .on('end', function ended() {
-            onDragEnd(this);
-          })
-      );
-  };
-
-  onDragStarted = ({ id }) => {
+  onDragStart = ({ id }) => {
     const { circles } = this.state;
-    const parsedId = parseInt(id, 10);
 
     const updatedCircles = circles.map((circle) => {
-      if (circle.id !== parsedId) {
+      if (circle.id !== id) {
         return circle;
       }
 
@@ -68,10 +39,9 @@ class App extends Component {
   onDrag = ({ id }, dragEvent) => {
     const { circles } = this.state;
     let { x, y } = dragEvent;
-    const parsedId = parseInt(id, 10);
 
     const updatedCircles = circles.map((circle) => {
-      if (circle.id !== parsedId) {
+      if (circle.id !== id) {
         return circle;
       }
 
@@ -104,10 +74,9 @@ class App extends Component {
 
   onDragEnd = ({ id }) => {
     const { circles } = this.state;
-    const parsedId = parseInt(id, 10);
 
     const updatedCircles = circles.map((circle) => {
-      if (circle.id !== parsedId) {
+      if (circle.id !== id) {
         return circle;
       }
 
@@ -126,6 +95,9 @@ class App extends Component {
           circles={circles}
           width={width}
           height={height}
+          onDragStart={this.onDragStart}
+          onDrag={this.onDrag}
+          onDragEnd={this.onDragEnd}
         />
       </div>
     );
