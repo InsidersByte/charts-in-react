@@ -21,28 +21,26 @@ const pieChart = pie()
   .sort(null)
   .value(d => d.value);
 
-const PieChart = ({ data }) => {
-  return (
-    <svg width={width} height={height}>
-      <g transform={`translate(${width / 2}, ${height / 2})`}>
-        {pieChart(data).map((d, i) => (
-          <g key={i} className="arc">
-            <path
-              d={dataArc(d)}
-              fill={colour(d.data.label)}
-            />
+const PieChart = ({ data }) => (
+  <svg width={width} height={height}>
+    <g transform={`translate(${width / 2}, ${height / 2})`}>
+      {pieChart(data).map((d, i) => (
+        <g key={i} className="arc">
+          <path
+            d={dataArc(d)}
+            fill={colour(d.data.label)}
+          />
 
-            <text
-              dy=".35em"
-              transform={`translate(${labelArc.centroid(d)})`}
-            >
-              {d.data.label}
-            </text>
-          </g>
-        ))}
-      </g>
-    </svg>
-  );
-};
+          <text
+            dy=".35em"
+            transform={`translate(${labelArc.centroid(d)})`}
+          >
+            {d.data.label}
+          </text>
+        </g>
+      ))}
+    </g>
+  </svg>
+);
 
 export default PieChart;
