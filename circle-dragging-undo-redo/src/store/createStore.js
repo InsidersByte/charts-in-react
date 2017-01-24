@@ -12,9 +12,7 @@ const configureStore = (initialState) => {
 
   const store = createStore(rootReducer, initialState, enhancer);
 
-  // Hot reload reducers (requires Webpack or Browserify HMR to be enabled)
   if (module.hot) {
-    // FIXME:FLOW ignore error
     module.hot.accept('../reducers', () =>
       store.replaceReducer(require('../reducers')),
     );
